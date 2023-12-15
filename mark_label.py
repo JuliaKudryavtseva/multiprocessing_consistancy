@@ -7,6 +7,8 @@ from multiprocess.no_multi import get_IOU, calculate_iou
 from multiprocess.multi_module import multi_get_IOU
 from multiprocess.mpi4py_module import mpi_get_IOU
 from multiprocess.cupy_module import cupy_get_IOU
+import time
+
 
 # preprocessing
 def load_masks(name):
@@ -29,8 +31,8 @@ def get_iou_function(multiprocess_type):
         return cupy_get_IOU
     
 
-def remove_duplicates(masks, frame_name):
-    dup_ious = get_IOU(masks, masks)
+def remove_duplicates(masks, frame_name, get_IOU_function):
+    dup_ious = get_IOU_function(masks, masks)
     dup_ious = dup_ious - np.eye(*dup_ious.shape)
 
     rows_nonzero, col_nonzero = np.nonzero(dup_ious > 0.5)
@@ -131,6 +133,8 @@ if __name__ == '__main__':
     OUTPUT_NAME = args.exp_name
     json_file = 'sk_masks.json'
 
+    IOU_function = get_iou_function(args.multi)
+
     os.makedirs(SAVE_PATH, exist_ok=True)
 
     with open(os.path.join(INPUT_PATH, json_file)) as f:
@@ -144,18 +148,16 @@ if __name__ == '__main__':
     first_frame = annotations[0]
 
     current_masks = load_masks(first_frame)
-    current_masks = remove_duplicates(current_masks, first_frame)
+    current_masks = remove_duplicates(current_masks, first_frame, IOU_function)
 
     current_masks = initialize(current_masks, labels_gen)
     save_masks(first_frame, current_masks)
-
+    
     for next_frame in tqdm(annotations[1:]):
-
         next_masks = load_masks(next_frame)
-        next_masks = remove_duplicates(next_masks, next_frame)
 
-        IOU = get_iou_function(args.multi)
-        IOUs = IOU(current_masks, next_masks)
+        next_masks = remove_duplicates(next_masks, next_frame, IOU_function)
+        IOUs = IOU_function(current_masks, next_masks)
 
         current_masks = make_frame_consistent(IOUs, current_masks, next_masks, labels_gen)
         save_masks(next_frame, current_masks)
