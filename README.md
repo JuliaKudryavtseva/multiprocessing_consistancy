@@ -3,9 +3,10 @@
 The problem of making video frames consistent is tightly connected to reconstruction of 3D scenes with NeRF arcitecture. Frame consistancy is labeling one objects with one class label on all frames. The current implemented algorithm performs satisfactory results, however, it is too slow. The main problem is in calculating IOU metrics between each mask in current masks array and each mask in next masks array, which is difficult task with images of high resolution.
 
 ## Quick start
-
+```
 git clone git@github.com:JuliaKudryavtseva/multiprocessing_consistancy.git
 cd multiprocessing_consistancy
+```
 
 create folder data and put there numpy masks: 
 ```
