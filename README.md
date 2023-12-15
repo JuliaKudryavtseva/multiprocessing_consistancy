@@ -9,7 +9,7 @@ cd multiprocessing_consistancy
 
 create folder data and put there numpy masks: 
 ```
-DATA_PATH: data
+data
 ├─ numpy_masks               
 │  ├─ 0015
 │  │  ├─ 0.npy  
