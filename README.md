@@ -8,7 +8,7 @@ git clone git@github.com:JuliaKudryavtseva/multiprocessing_consistancy.git
 cd multiprocessing_consistancy
 
 create folder data and put there numpy masks: 
-
+```
 DATA_PATH: data
 ├─ numpy_masks               
 │  ├─ 0015
@@ -16,6 +16,7 @@ DATA_PATH: data
 │  │  ├─ 1.npy  
 │  ...
 | sk_masks.json
+```
 
 ## Algorithm without multiprocessing
 
