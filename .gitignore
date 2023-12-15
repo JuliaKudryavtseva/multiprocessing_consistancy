@@ -1,3 +1,5 @@
 data/
 experiments/
 vis_consistent/
+ __pycache__/
+ *.pyc
