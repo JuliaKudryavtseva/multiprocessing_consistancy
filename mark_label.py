@@ -3,7 +3,7 @@ import os
 import json
 from tqdm import tqdm
 import argparse
-
+from multiprocess.no_multi import get_IOU, calculate_iou
 
 # preprocessing
 def load_masks(name):
@@ -12,29 +12,10 @@ def load_masks(name):
     next_masks = [np.load(os.path.join(INPUT_PATH, mask_path)) for mask_path in next_mask_path]
     return next_masks
 
-
-# functions for IOUs calculations
-def calculate_iou(gt_mask, pred_mask):
-    overlap = pred_mask * gt_mask  # Logical AND
-    union = (pred_mask + gt_mask) > 0  # Logical OR
-    iou = overlap.sum() / float(union.sum())
-    return iou
-
-
-def get_IOU(curr_masks, next_masks):
-    IOUs = np.zeros((len(curr_masks), len(next_masks)))
-
-    for i, mask1 in enumerate(curr_masks):
-        for j, mask2 in enumerate(next_masks):
-
-            mask1 = (mask1 > 0).astype(int)
-            mask2 = (mask2 > 0).astype(int)
-
-            iou = calculate_iou(mask1, mask2)
-            # if iou > threshold:
-            IOUs[i][j] = iou
-
-    return IOUs
+def get_iou_function(multiprocess_type):
+    if multiprocess_type=='no':
+        return get_IOU
+    
 
 def remove_duplicates(masks, frame_name):
     dup_ious = get_IOU(masks, masks)
@@ -126,10 +107,12 @@ def parse_args():
 
     parser.add_argument('--data-path', type=str, default='data',  help='Path to the data.')
     parser.add_argument('--exp-name', type=str, help='Here you can specify the name of the experiment.')
+    parser.add_argument('--multi', type=str, help='Here you can specify the multiprocess type.')
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = parse_args()
+    print('Multiprocess type: ', args.multi)
     
     INPUT_PATH = args.data_path
     SAVE_PATH = os.path.join('experiments', args.exp_name)
@@ -158,8 +141,10 @@ if __name__ == '__main__':
 
         next_masks = load_masks(next_frame)
         next_masks = remove_duplicates(next_masks, next_frame)
-        
-        IOUs = get_IOU(current_masks, next_masks)
+
+        IOU = get_iou_function(args.multi)
+        IOUs = IOU(current_masks, next_masks)
+
         current_masks = make_frame_consistent(IOUs, current_masks, next_masks, labels_gen)
         save_masks(next_frame, current_masks)
 
