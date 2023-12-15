@@ -4,6 +4,9 @@ import json
 from tqdm import tqdm
 import argparse
 from multiprocess.no_multi import get_IOU, calculate_iou
+from multiprocess.multi_module import multi_get_IOU
+from multiprocess.mpi4py_module import mpi_get_IOU
+from multiprocess.cupy_module import cupy_get_IOU
 
 # preprocessing
 def load_masks(name):
@@ -15,6 +18,15 @@ def load_masks(name):
 def get_iou_function(multiprocess_type):
     if multiprocess_type=='no':
         return get_IOU
+    
+    elif multiprocess_type=='multi':
+        return multi_get_IOU
+    
+    elif multiprocess_type=='mpi':
+        return mpi_get_IOU
+
+    elif multiprocess_type=='cupy':
+        return cupy_get_IOU
     
 
 def remove_duplicates(masks, frame_name):
@@ -107,7 +119,7 @@ def parse_args():
 
     parser.add_argument('--data-path', type=str, default='data',  help='Path to the data.')
     parser.add_argument('--exp-name', type=str, help='Here you can specify the name of the experiment.')
-    parser.add_argument('--multi', type=str, help='Here you can specify the multiprocess type.')
+    parser.add_argument('--multi', type=str, default='no', help='Here you can specify the multiprocess type.')
     return parser.parse_args()
 
 if __name__ == '__main__':
