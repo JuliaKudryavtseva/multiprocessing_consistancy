@@ -2,6 +2,7 @@ import numpy as np
 import os
 import json
 from tqdm import tqdm
+import argparse
 
 
 # preprocessing
@@ -118,13 +119,22 @@ def save_masks(frame_name, frame_masks):
         del masks_ann[ind_mask]['segmentation']
         masks_ann[ind_mask]['segmentation'] =  path_marked_mask
 
+# parsing args
+def parse_args():
+
+    parser = argparse.ArgumentParser(description ='args for algorithm which makes frame consistant')
+
+    parser.add_argument('--data-path', type=str, default='data',  help='Path to the data.')
+    parser.add_argument('--exp-name', type=str, help='Here you can specify the name of the experiment.')
+    return parser.parse_args()
 
 if __name__ == '__main__':
+    args = parse_args()
     
-    INPUT_PATH = './data/skolkovo_stability_score'
-    SAVE_PATH = './data/marked_images_skolkovo_stability_score'
-    OUTPUT_NAME = 'skolkovo_stability_score'
-    json_file = 'skolkovo_stability_score.json'
+    INPUT_PATH = args.data_path
+    SAVE_PATH = os.path.join('experiments', args.exp_name)
+    OUTPUT_NAME = args.exp_name
+    json_file = 'sk_masks.json'
 
     os.makedirs(SAVE_PATH, exist_ok=True)
 

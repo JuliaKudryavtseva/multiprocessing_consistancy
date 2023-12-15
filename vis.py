@@ -4,6 +4,7 @@ import json
 import numpy as np
 from tqdm import tqdm
 from PIL import Image
+import argparse
 
 
 def generate_color():
@@ -40,11 +41,19 @@ def load_masks(name):
     next_masks = [np.load(mask_path) for mask_path in next_mask_path]
     return next_masks
 
+# parse arguments
+def parse_args():
+
+    parser = argparse.ArgumentParser(description ='args for algorithm which makes frame consistant')
+    parser.add_argument('--exp-name', type=str, help='Here you can specify the name of the experiment.')
+    return parser.parse_args()
 
 if __name__ == '__main__':
-    INPUT_PATH = './data/marked_images_skolkovo_stability_score'
-    SAVE_PATH = './data/vis_consistent'
-    json_file = 'skolkovo_stability_score.json'
+    args = parse_args()
+
+    INPUT_PATH = os.path.join('experiments', args.exp_name)
+    SAVE_PATH = 'vis_consistent'
+    json_file = args.exp_name+'.json'
 
     os.makedirs(SAVE_PATH, exist_ok=True)
 
@@ -65,5 +74,5 @@ if __name__ == '__main__':
 
 
     image_list[0].save(
-        os.path.join(SAVE_PATH, "vis_consistent_skolkovo_stability_score.gif"), 
+        os.path.join(SAVE_PATH, args.exp_name+".gif"), 
         save_all=True, append_images=image_list[1:], optimize=False, duration=100, loop=0)
