@@ -161,7 +161,7 @@ if __name__ == '__main__':
         start = time.time()
         IOUs = IOU_function(current_masks, next_masks)
         end = time.time()
-        time_spend.append(start - end)
+        time_spend.append(end - start)
 
         current_masks = make_frame_consistent(IOUs, current_masks, next_masks, labels_gen)
         save_masks(next_frame, current_masks)
@@ -171,5 +171,5 @@ if __name__ == '__main__':
 
     # save time spend
     os.makedirs('running_time', exist_ok=True)
-    with open('running_time/{OUTPUT_NAME}.json', 'w', encoding='utf8') as output:
+    with open(f'running_time/{OUTPUT_NAME}.json', 'w', encoding='utf8') as output:
         json.dump(time_spend, output)
