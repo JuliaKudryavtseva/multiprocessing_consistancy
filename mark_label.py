@@ -153,14 +153,23 @@ if __name__ == '__main__':
     current_masks = initialize(current_masks, labels_gen)
     save_masks(first_frame, current_masks)
     
+    time_spend = []
     for next_frame in tqdm(annotations[1:]):
         next_masks = load_masks(next_frame)
-
         next_masks = remove_duplicates(next_masks, next_frame, IOU_function)
+
+        start = time.time()
         IOUs = IOU_function(current_masks, next_masks)
+        end = time.time()
+        time_spend.append(start - end)
 
         current_masks = make_frame_consistent(IOUs, current_masks, next_masks, labels_gen)
         save_masks(next_frame, current_masks)
 
     with open(os.path.join(SAVE_PATH, f'{OUTPUT_NAME}.json') , 'w', encoding='utf-8') as f:
         json.dump(ANNOTATIONS, f, ensure_ascii=False, indent=4)
+
+    # save time spend
+    os.makedirs('running_time', exists_ok=True)
+    with open('running_time/{OUTPUT_NAME}.json', 'w', encoding='utf8') as output:
+        json.dump(time_spend, output)
