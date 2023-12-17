@@ -170,6 +170,6 @@ if __name__ == '__main__':
         json.dump(ANNOTATIONS, f, ensure_ascii=False, indent=4)
 
     # save time spend
-    os.makedirs('running_time', exists_ok=True)
+    os.makedirs('running_time', exist_ok=True)
     with open('running_time/{OUTPUT_NAME}.json', 'w', encoding='utf8') as output:
         json.dump(time_spend, output)
