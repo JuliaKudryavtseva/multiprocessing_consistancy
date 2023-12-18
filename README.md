@@ -1,6 +1,6 @@
 # Multiprocessing consistancy
 
-The problem of making video frames consistent is tightly connected to reconstruction of 3D scenes with NeRF architecture. Frame consistency is labeling one objects with one class label on all frames. The current implemented algorithm performs satisfactory results, however, it is too slow. The main problem is in calculating IOU metrics between each mask in current masks array and each mask in next masks array, which is difficult task with images of high resolution.
+The problem of making video frames consistent is tightly connected to reconstruction of 3D scenes with NeRF architecture and segmentation of objects on new rendered images without using huge neural backbones. Frame consistency is labeling one objects with one class label on all frames. The current implemented algorithm performs satisfactory results, however, it is too slow. The main problem is in calculating IOU metrics between each mask in current masks array and each mask in next masks array, which is difficult task with images of high resolution.
 
 
 Before algorithm     |  After algorithm
