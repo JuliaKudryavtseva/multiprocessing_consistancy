@@ -1,19 +1,27 @@
-import numpy as np
-
-
-# functions for IOUs calculations
-def calculate_iou(gt_mask, pred_mask):
-    overlap = pred_mask * gt_mask  # Logical AND
-    union = (pred_mask + gt_mask) > 0  # Logical OR
-    iou = overlap.sum() / float(union.sum())
-    return iou
+import cupy as cp
+import gc
 
 def cupy_get_IOU(curr_masks, next_masks):
-    '''
-    Create process for every IOU(mask_1, mask_2) and gather all results into matrix of IOUs
+    curr_masks = cp.array(curr_masks)
+    next_masks = cp.array(next_masks)
 
-    Input: list of np.arrays
-    Output: np.array (len(curr_masks) * len(next_masks))
-    '''
-    IOUs = np.zeros((len(curr_masks), len(next_masks)))
-    return IOUs
+    curr_masks_binary = (curr_masks > 0).astype(cp.int32)
+    next_masks_binary = (next_masks > 0).astype(cp.int32)
+
+    num_curr_masks = curr_masks.shape[0]
+    num_next_masks = next_masks.shape[0]
+    batch_size = 8
+
+    iou_matrix = cp.zeros((num_curr_masks, num_next_masks), dtype=cp.float32)
+
+    for i in range(0, num_curr_masks, batch_size):
+        curr_batch = curr_masks_binary[i:i + batch_size, cp.newaxis, :, :]
+        intersection_batch = cp.sum(curr_batch & next_masks_binary, axis=(2, 3))
+        union_batch = cp.sum(curr_batch | next_masks_binary, axis=(2, 3))
+
+        iou_matrix[i:i + batch_size, :] = intersection_batch / union_batch
+
+    del curr_masks_binary, next_masks_binary, intersection_batch, union_batch, curr_batch
+    gc.collect()
+
+    return np.array(iou_matrix.get())
