@@ -43,3 +43,10 @@ Options:
     python mark_label.py --exp-name mpi --multi mpi
 
     python mark_label.py --exp-name cupy --multi cupy
+
+
+## Get estimation of the results of multiprocessing
+
+    python running_time/get_results.py
+
+# Results   
