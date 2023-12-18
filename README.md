@@ -15,8 +15,7 @@ cd multiprocessing_consistancy
 
 create folder data and put there numpy masks: 
 
-https://drive.google.com/file/d/1aul4j2pvKxueZ94uOHVwOFeM8ba_oeSg/view?usp=sharing
-
+https://drive.google.com/file/d/15ywBQ55yWYsuvv3QvLoTmVNN1jwMvUX3/view?usp=sharing
 ```
 data
 ├─ numpy_masks               
