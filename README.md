@@ -50,3 +50,7 @@ Options:
     python running_time/get_results.py
 
 # Results   
+
+Average time results       |  Average speed up results 
+:-------------------------:|:-------------------------:
+![](https://github.com/JuliaKudryavtseva/multiprocessing_consistancy/blob/main/running_time/time_per_image.png)  |  ![](https://github.com/JuliaKudryavtseva/multiprocessing_consistancy/blob/main/running_time/all_images_speed_up.png)
