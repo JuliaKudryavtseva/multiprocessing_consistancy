@@ -1,5 +1,5 @@
 import numpy as np
-
+from mpi4py import MPI
 
 # functions for IOUs calculations
 def calculate_iou(gt_mask, pred_mask):
