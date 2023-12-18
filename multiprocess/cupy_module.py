@@ -1,5 +1,6 @@
 import cupy as cp
 import gc
+import numpy as np
 
 def cupy_get_IOU(curr_masks, next_masks):
     curr_masks = cp.array(curr_masks)
