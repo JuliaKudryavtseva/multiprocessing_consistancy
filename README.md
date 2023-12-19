@@ -50,7 +50,6 @@ Start a profiler:
     
 ```
 ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-    171/1    0.002    0.000 3655.652 3655.652 {built-in method builtins.exec}
         1    1.126    1.126 3655.651 3655.651 mark_label.py:1(<module>)
        89  865.592    9.726 3605.557   40.512 no_multi.py:11(get_IOU)
        45    0.033    0.001 2248.837   49.974 mark_label.py:34(remove_duplicates)
