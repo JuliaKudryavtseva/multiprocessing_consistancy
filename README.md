@@ -11,7 +11,15 @@ Before algorithm     |  After algorithm
 ```
 git clone git@github.com:JuliaKudryavtseva/multiprocessing_consistancy.git
 cd multiprocessing_consistancy
+pip install -r requirements.txt
 ```
+or install mpi4py and cupy from:
+
+https://pypi.org/project/mpi4py/
+
+https://docs.cupy.dev/en/stable/install.html#requirements
+
+
 
 create folder data and put there numpy masks: 
 
