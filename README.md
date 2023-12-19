@@ -48,7 +48,15 @@ Start a profiler:
 
     python -m cProfile -s cumulative mark_label.py --exp-name no_multiprocessing
     
-
+```
+ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    171/1    0.002    0.000 3655.652 3655.652 {built-in method builtins.exec}
+        1    1.126    1.126 3655.651 3655.651 mark_label.py:1(<module>)
+       89  865.592    9.726 3605.557   40.512 no_multi.py:11(get_IOU)
+       45    0.033    0.001 2248.837   49.974 mark_label.py:34(remove_duplicates)
+   266834 1390.288    0.005 1902.897    0.007 no_multi.py:5(calculate_iou)
+       44    9.865    0.224   28.594    0.650 mark_label.py:75(make_frame_consistent)
+```
 ## Algorithm with multiprocessing
 
 Options:
